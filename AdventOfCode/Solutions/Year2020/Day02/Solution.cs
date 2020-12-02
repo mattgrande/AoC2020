@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AdventOfCode.Solutions.Year2020
 {
@@ -34,36 +32,38 @@ namespace AdventOfCode.Solutions.Year2020
 
         private bool IsValidOne(string input)
         {
-            var split = input.Split(':');
-            var nums = split[0];
-            var pw = split[1].Trim();
+            var pwl = new PasswordLine(input);
+            var count = pwl.Password.Where(c => c == pwl.Letter).Count();
 
-            var split2 = nums.Split(' ');
-            var split3 = split2[0].Split('-');
-
-            var lowerBound = int.Parse(split3[0]);
-            var upperBound = int.Parse(split3[1]);
-            var letter = split2[1][0];
-
-            var count = pw.Where(c => c == letter).Count();
-
-            return count >= lowerBound && count <= upperBound;
+            return count >= pwl.FirstNumber && count <= pwl.SecondNumber;
         }
 
         private bool IsValidTwo(string input)
         {
-            var split = input.Split(':');
-            var nums = split[0];
-            var pw = split[1].Trim();
+            var pwl = new PasswordLine(input);
+            return (pwl.Password[pwl.FirstNumber - 1] == pwl.Letter ^ pwl.Password[pwl.SecondNumber - 1] == pwl.Letter);
+        }
 
-            var split2 = nums.Split(' ');
-            var split3 = split2[0].Split('-');
+        protected class PasswordLine
+        {
+            internal string Password { get; private set; }
+            internal char Letter { get; private set; }
+            internal int FirstNumber { get; private set; }
+            internal int SecondNumber { get; private set; }
 
-            var index1 = int.Parse(split3[0]) - 1;
-            var index2 = int.Parse(split3[1]) - 1;
-            var letter = split2[1][0];
+            public PasswordLine(string input)
+            {
+                var split = input.Split(':');
+                var nums = split[0];
+                Password = split[1].Trim();
 
-            return (pw[index1] == letter ^ pw[index2] == letter);
+                var split2 = nums.Split(' ');
+                var split3 = split2[0].Split('-');
+
+                FirstNumber = int.Parse(split3[0]);
+                SecondNumber = int.Parse(split3[1]);
+                Letter = split2[1][0];
+            }
         }
     }
 }
