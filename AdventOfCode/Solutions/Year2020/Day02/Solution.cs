@@ -14,16 +14,20 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-            var lines = Input.Split('\n');
-            var c = lines.Where(s => IsValidOne(s))
-                         .Count();
-            return c.ToString();
+            Func<string, bool> v = (s) => IsValidOne(s);
+            return ValidatePassword(v);
         }
 
         protected override string SolvePartTwo()
         {
+            Func<string, bool> v = (s) => IsValidTwo(s);
+            return ValidatePassword(v);
+        }
+
+        private string ValidatePassword(Func<string, bool> validationFn)
+        {
             var lines = Input.Split('\n');
-            var c = lines.Where(s => IsValidTwo(s))
+            var c = lines.Where(validationFn)
                          .Count();
             return c.ToString();
         }
