@@ -22,6 +22,8 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
+            var lines = Input.Split('\n');
+
             var opts = new List<Tuple<int, int>>();
             opts.Add(new Tuple<int, int>(1, 1));
             opts.Add(new Tuple<int, int>(3, 1));
@@ -29,19 +31,8 @@ namespace AdventOfCode.Solutions.Year2020
             opts.Add(new Tuple<int, int>(7, 1));
             opts.Add(new Tuple<int, int>(1, 2));
 
-            var results = new List<long>();
-
-            var lines = Input.Split('\n');
-
-            foreach (var opt in opts)
-            {
-                int c = GetTreeCount(opt.Item2, opt.Item1, lines);
-                Console.WriteLine("Right {0}, Down {1}: {2}", opt.Item1, opt.Item2, c);
-                results.Add(c);
-            }
-
-            long seed = 1;
-            return results.Aggregate(seed, (acc, x) => acc * x).ToString();
+            return opts.Select(opt => GetTreeCount(opt.Item2, opt.Item1, lines))
+                       .Aggregate(1L, (acc, x) => acc * x).ToString();
         }
 
         private int GetTreeCount(int moveDown, int moveRight, string[] lines)
