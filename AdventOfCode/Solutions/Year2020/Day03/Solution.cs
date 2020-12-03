@@ -39,25 +39,19 @@ namespace AdventOfCode.Solutions.Year2020
         {
             int x = 0;
             int y = 0;
-            int c = 0;
+            var spaces = new List<char>();
 
             while ((y += moveDown) < lines.Length)
             {
                 x += moveRight;
                 var row = lines[y];
                 var space = row[x % row.Length];
-                if (IsTree(space))
-                {
-                    c++;
-                }
+                spaces.Add(space);
             }
 
-            return c;
+            return spaces.Where(IsTree).Count();
         }
 
-        private bool IsTree(char x)
-        {
-            return x == '#';
-        }
+        private Func<char, bool> IsTree = (x) => x == '#';
     }
 }
