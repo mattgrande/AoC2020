@@ -16,23 +16,7 @@ namespace AdventOfCode.Solutions.Year2020
         protected override string SolvePartOne()
         {
             var lines = Input.Split('\n');
-
-            int x = 0;
-            int y = 0;
-            int c = 0;
-
-            while (y < lines.Length - 1) {
-                y++;
-                x+=3;
-                var row = lines[y];
-                var space = row[x % row.Length];
-                // Console.Write(space);
-                if (IsTree(space))
-                {
-                    c++;
-                }
-            }
-
+            int c = GetTreeCount(1, 3, lines);
             return c.ToString();
         }
 
@@ -51,28 +35,33 @@ namespace AdventOfCode.Solutions.Year2020
 
             foreach (var opt in opts)
             {
-                int x = 0;
-                int y = 0;
-                int c = 0;
-
-                while ((y += opt.Item2) < lines.Length)
-                {
-                    x += opt.Item1;
-                    var row = lines[y];
-                    var space = row[x % row.Length];
-                    // Console.Write(space);
-                    if (IsTree(space))
-                    {
-                        c++;
-                    }
-                }
-
+                int c = GetTreeCount(opt.Item2, opt.Item1, lines);
                 Console.WriteLine("Right {0}, Down {1}: {2}", opt.Item1, opt.Item2, c);
                 results.Add(c);
             }
 
             long seed = 1;
             return results.Aggregate(seed, (acc, x) => acc * x).ToString();
+        }
+
+        private int GetTreeCount(int moveDown, int moveRight, string[] lines)
+        {
+            int x = 0;
+            int y = 0;
+            int c = 0;
+
+            while ((y += moveDown) < lines.Length)
+            {
+                x += moveRight;
+                var row = lines[y];
+                var space = row[x % row.Length];
+                if (IsTree(space))
+                {
+                    c++;
+                }
+            }
+
+            return c;
         }
 
         private bool IsTree(char x)
