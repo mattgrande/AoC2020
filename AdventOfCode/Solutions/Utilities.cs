@@ -129,5 +129,10 @@ namespace AdventOfCode.Solutions
         }
 
         public static (int, int) Add(this (int x, int y) a, (int x, int y) b) => (a.x + b.x, a.y + b.y);
+
+        public static C Pipe<A, B, C>(this A a, Func<A, B> fn1, Func<B, C> fn2)
+        {
+            return fn2(fn1(a));
+        }
     }
 }
