@@ -26,9 +26,19 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            // var lines = Input.SplitByNewline();
-            // var seatIndicies = lines.Select(l => FindSeatIndex(l)).OrderBy(i => i).ToList();
-            // return seatIndicies[seatIndicies.Length - 1].ToString();
+            var lines = Input.SplitByNewline();
+            var seatIndicies = lines.Select(l => FindSeatIndex(l)).OrderBy(i => i).ToList();
+            var lowestSeat = seatIndicies[0];
+            var biggestSeat = seatIndicies[seatIndicies.Count - 1];
+            var unusedSeats = new List<int>();
+            foreach (var i in Enumerable.Range(lowestSeat, biggestSeat - lowestSeat))
+            {
+                if (! seatIndicies.Contains(i))
+                {
+                    return i.ToString();
+                }
+            }
+            return null;
         }
 
         public int FindSeatIndex(string s)
