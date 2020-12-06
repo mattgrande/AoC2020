@@ -27,25 +27,16 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            var sum = 0;
-            var groups = Input.Split("\n\n").Select(people => people.Split('\n'));
-            groups.Select(group => group.Select(person => person.Distinct().OrderBy(c => c)));
-
-            foreach (var group in groups)
-            {
-                var groupsum = 0;
-                string person = group.First();
-                Console.WriteLine("First: {0}", person);
-                foreach (char q in person)
-                {
-                    Console.WriteLine("Checking {0} for", q);
-                    Console.WriteLine(group.All(p => p.Contains(q)) ? "Y" : "N");
-                    groupsum += group.All(p => p.Contains(q)) ? 1 : 0;
-                }
-                sum += groupsum;
-            }
-
-            return sum.ToString();
+            return Input.Split("\n\n")
+                        .Select(people => people.Split('\n').Select(person => person.Distinct().OrderBy(c => c)))
+                        .Aggregate(
+                            0,
+                            (acc, people) => acc + people.First().Aggregate(
+                                0,
+                                (acc, q) => acc + (people.All(p => p.Contains(q)) ? 1 : 0)
+                            )
+                        )
+                        .ToString();
         }
     }
 }
