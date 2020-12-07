@@ -77,42 +77,7 @@ namespace AdventOfCode.Solutions.Year2020
                     }
                 }
             }
-
-            // var bags = new List<Bag>();
-            // foreach (var line in lines)
-            // {
-            //     var c = Bag.GetColour(line);
-            //     Console.WriteLine("Parsing {0}", c);
-            //     var parentBags = GetParents(c, bags);
-            //     Console.WriteLine("Parents: {0}", parentBags.Count);
-            //     if (parentBags.Count == 0)
-            //     {
-            //         var bag = Bag.Parse(line);
-            //         for (var i = 0; i < bag.Bags.Count; i++)
-            //         {
-            //             var newChild = bag.Bags[i];
-            //             var b = bags.Find(b => b.Colour == newChild.Colour);
-            //             if (b != null)
-            //             {
-            //                 bag.Bags[i] = b;
-            //             }
-            //         }
-            //         bags.Add(bag);
-            //     }
-            //     else
-            //     {
-            //         foreach (var parentBag in parentBags)
-            //         {
-            //             Console.WriteLine("Parent Bag: {0}", parentBag.Colour);
-            //             var i = parentBag.Bags.FindIndex(b => b.Colour == c);
-            //             var newBag = Bag.Parse(line);
-            //             parentBag.Bags[i] = newBag;
-            //             if (! bags.Any(b => b.Colour == newBag.Colour))
-            //                 bags.Add(newBag);
-            //         }
-            //     }
-            // }
-                             
+             
             return allBags;
         }
 
@@ -153,12 +118,6 @@ namespace AdventOfCode.Solutions.Year2020
                 Colour = parts[0],
                 Bags = bags.Select(b => new Bag {Colour = b}).ToList(),
             };
-        }
-
-        public static string GetColour(string input)
-        {
-            var parts = input.Split(" bags contain ");
-            return parts[0];
         }
 
         public bool Contains(string colour)
