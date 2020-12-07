@@ -31,7 +31,16 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            return SolvePt2().ToString();
+        }
+
+        public int SolvePt2()
+        {
+            var bags = Parse();
+            var containers = bags.Where(b => b.Colour == "shiny gold")
+                                 .Distinct()
+                                 .Aggregate(0, (acc, b) => acc + b.TotalQuantity);
+            return containers - 1;
         }
 
         public IList<Bag> Parse()
@@ -83,7 +92,7 @@ namespace AdventOfCode.Solutions.Year2020
 
         private bool AllChildrenParsed(Bag bag, SortedSet<string> parsedBags)
         {
-            return bag.Bags.All(b => parsedBags.Contains(b.Colour));
+            return bag.Bags.All(b => parsedBags.Contains(b.Item1.Colour));
         }
 
         public static List<Bag> GetParents(string colour, IList<Bag> bags)
@@ -103,32 +112,48 @@ namespace AdventOfCode.Solutions.Year2020
     public class Bag
     {
         public string Colour { get; set; }
-        public List<Bag> Bags { get; private set; } = new List<Bag>();
+        public List<Tuple<Bag, int>> Bags { get; private set; } = new List<Tuple<Bag, int>>();
+        public int TotalQuantity
+        {
+            get
+            {
+                var i = 1;
+                foreach (var t in Bags)
+                {
+                    i += (t.Item1.TotalQuantity * t.Item2);
+                }
+                return i;
+            }
+        }
         public static Bag Parse(string input)
         {
             var bagsRegex = new Regex(" bags?");
             var startWithNumber = new Regex("^\\d+ ");
             var parts = input.Split(" bags contain ");
             var bags = parts[1].Split(", ")
-                               .Select(b => bagsRegex.Replace(b, ""))
-                               .Select(b => startWithNumber.Replace(b, ""))
-                               .Where(b => b != "no other");
-            return new Bag
+                               .Where(b => ! b.Contains("no other"))
+                               .Select(b => bagsRegex.Replace(b, ""));
+            
+            var b = new Bag { Colour = parts[0] };
+            foreach (var nOfBags in bags)
             {
-                Colour = parts[0],
-                Bags = bags.Select(b => new Bag {Colour = b}).ToList(),
-            };
+                var n = int.Parse(nOfBags.Split(' ')[0]);
+                var bagColour = startWithNumber.Replace(nOfBags, "");
+                b.Bags.Add(new Tuple<Bag, int>(new Bag { Colour = bagColour }, n));
+            }
+
+            return b;
         }
 
         public bool Contains(string colour)
         {
-            return Bags.Any(b => b.Colour == colour);
+            return Bags.Any(t => t.Item1.Colour == colour);
         }
 
         public bool DeepContains(string colour)
         {
-            return Bags.Any(b => {
-                return b.Colour == colour || b.DeepContains(colour);
+            return Bags.Any(t => {
+                return t.Item1.Colour == colour || t.Item1.DeepContains(colour);
             });
         }
 
@@ -140,15 +165,16 @@ namespace AdventOfCode.Solutions.Year2020
         public string ToString(int depth = 0)
         {
             var prefix = new String('>', depth) + (depth > 0 ? " " : "");
-            return string.Format("{2}{0}{1}", Colour, Bags.Aggregate("", (acc, b) => string.Format("{0}\n{1}", acc, b.ToString(depth + 1))), prefix);
+            return string.Format("{2}{0}{1}", Colour, Bags.Aggregate("", (acc, b) => string.Format("{0}\n{1}", acc, b.Item1.ToString(depth + 1))), prefix);
         }
 
         internal void AttachChildren(List<Bag> allBags)
         {
             for (int i = 0; i < Bags.Count; i++)
             {
-                var oldBag = Bags[i];
-                Bags[i] = allBags.Single(b => b.Colour == oldBag.Colour);
+                var oldBag = Bags[i].Item1;
+                var newBag = allBags.Single(b => b.Colour == oldBag.Colour);
+                Bags[i] = new Tuple<Bag, int>(newBag, Bags[i].Item2);
             }
         }
     }
