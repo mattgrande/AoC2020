@@ -105,7 +105,6 @@ namespace AdventOfCode.Tests
 277
 309
 576";
-            Console.WriteLine("BEEF");
             var result = d9.SolvePt2(127);
             Assert.AreEqual(62, result);
         }
