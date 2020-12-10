@@ -32,6 +32,15 @@ namespace AdventOfCode.Solutions
 
         }
 
+        public static long[] ToLongArray(this string str, string delimiter = "")
+        {
+            return str
+                .Split(delimiter)
+                .Where(n => long.TryParse(n, out long v))
+                .Select(n => Convert.ToInt64(n))
+                .ToArray();
+        }
+
 
         public static int MinOfMany(params int[] items)
         {

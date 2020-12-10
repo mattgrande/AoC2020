@@ -18,7 +18,7 @@ namespace AdventOfCode.Solutions.Year2020
             return SolvePt1().ToString();
         }
 
-        public int SolvePt1(int preambleSize = 25)
+        public long SolvePt1(int preambleSize = 25)
         {
             var parts = SplitPreamble(preambleSize);
             var preamble = parts[0];
@@ -38,20 +38,47 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            return SolvePt2(1930745883).ToString();
         }
 
-        public IList<IList<int>> SplitPreamble(int preambleSize = 25)
+        public long SolvePt2(long pt1Sln)
         {
-            var ints = Input.ToIntArray("\n").ToList();
+            var numbers = Input.ToLongArray("\n");
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                var currentList = new List<long> { numbers[i] };
+                var sum = numbers[i];
+                for (int j = (i + 1); j < numbers.Length; j++)
+                {
+                    currentList.Add(numbers[j]);
+                    sum += numbers[j];
+                    if (sum > pt1Sln) break;
+                    if (sum == pt1Sln)
+                    {
+                        var min = currentList.Aggregate(long.MaxValue, (x, y) => Math.Min(x, y));
+                        var max = currentList.Aggregate(0L, (x, y) => Math.Max(x, y));
+                        return min + max;
+                    }
+                }
+
+                Console.WriteLine("");
+            }
+
+            return 0;
+        }
+
+        public IList<IList<long>> SplitPreamble(int preambleSize = 25)
+        {
+            var ints = Input.ToLongArray("\n").ToList();
             var preamble = ints.Take(preambleSize).ToList();
             var theRest = ints.Skip(preambleSize).ToList();
-            return new List<IList<int>> { preamble, theRest };
+            return new List<IList<long>> { preamble, theRest };
         }
 
-        public static IList<int> GetPossibleSums(IList<int> preamble)
+        public static IList<long> GetPossibleSums(IList<long> preamble)
         {
-            var sums = new List<int>();
+            var sums = new List<long>();
             for (int i = 0; i < preamble.Count; i++)
             {
                 for (int j = (i + 1); j < preamble.Count; j++)
