@@ -8,6 +8,7 @@ namespace AdventOfCode.Solutions.Year2020
 
     public class Day11 : ASolution
     {
+        public string[] Rows { get; private set; }
 
         public Day11() : base(11, 2020, "")
         {
@@ -16,7 +17,14 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-            return null;
+            return SolvePt1().ToString();
+        }
+
+        public int SolvePt1()
+        {
+            Rows = Input.SplitByNewline();
+            while (Step()) {};
+            return CountOccupiedSeats();
         }
 
         protected override string SolvePartTwo()
@@ -24,38 +32,38 @@ namespace AdventOfCode.Solutions.Year2020
             return null;
         }
 
-        public string[] Step(string[] rows)
+        public bool Step(string[] rows = null)
         {
+            if (rows != null) Rows = rows;
+
             var seatsToOccupy = new List<(int Row, int Col)>();
             var seatsToVacate = new List<(int Row, int Col)>();
 
-            for (int r = 0; r < rows.Length; r++)
+            for (int r = 0; r < Rows.Length; r++)
             {
-                var row = rows[r];
+                var row = Rows[r];
                 for (int c = 0; c < row.Length; c++)
                 {
-                    if (IsEmpty(r, c, rows) && ShouldOccupy(r, c, rows)) seatsToOccupy.Add((r, c));
-                    if (IsOccupied(r, c, rows) && ShouldVacate(r, c, rows)) seatsToVacate.Add((r, c));
+                    if (IsEmpty(r, c, Rows) && ShouldOccupy(r, c, Rows)) seatsToOccupy.Add((r, c));
+                    if (IsOccupied(r, c, Rows) && ShouldVacate(r, c, Rows)) seatsToVacate.Add((r, c));
                 }
             }
 
             foreach (var seat in seatsToOccupy)
             {
-                Console.WriteLine("Occupy {0},{1}", seat.Row, seat.Col);
-                var row = new StringBuilder(rows[seat.Row]);
+                var row = new StringBuilder(Rows[seat.Row]);
                 row[seat.Col] = '#';
-                rows[seat.Row] = row.ToString();
+                Rows[seat.Row] = row.ToString();
             }
 
             foreach (var seat in seatsToVacate)
             {
-                Console.WriteLine("Vacate {0},{1}", seat.Row, seat.Col);
-                var row = new StringBuilder(rows[seat.Row]);
+                var row = new StringBuilder(Rows[seat.Row]);
                 row[seat.Col] = 'L';
-                rows[seat.Row] = row.ToString();
+                Rows[seat.Row] = row.ToString();
             }
 
-            return rows;
+            return (seatsToOccupy.Count + seatsToVacate.Count) > 0;
         }
 
         public bool ShouldOccupy(int row, int column, string[] rows)
@@ -94,9 +102,10 @@ namespace AdventOfCode.Solutions.Year2020
             return false;
         }
 
-        public int CountOccupiedSeats(string[] rows)
+        public int CountOccupiedSeats(string[] rows = null)
         {
-            return rows.Sum((row) => row.Aggregate(acc, c) => acc + (c == '#' ? 1 : 0));
+            rows = rows ?? Rows;
+            return rows.Sum((row) => row.Aggregate(0, (acc, c) => acc + (c == '#' ? 1 : 0)));
         }
 
         private bool IsOccupied(int row, int column, string[] rows)

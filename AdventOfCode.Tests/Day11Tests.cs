@@ -30,9 +30,9 @@ namespace AdventOfCode.Tests
         public void Test_Step1()
         {
             var d11 = new Day11();
-            var result = d11.Step(defaultInput);
-            Assert.AreEqual("#.##.##.##", result[0]);
-            Assert.AreEqual("#.#####.##", result[^1]);
+            d11.Step(defaultInput);
+            Assert.AreEqual("#.##.##.##", d11.Rows[0]);
+            Assert.AreEqual("#.#####.##", d11.Rows[^1]);
         }
 
         [Test]
@@ -40,9 +40,9 @@ namespace AdventOfCode.Tests
         {
             var d11 = new Day11();
             var result = d11.Step(defaultInput);
-            result = d11.Step(result);
-            Assert.AreEqual("#.LL.L#.##", result[0]);
-            Assert.AreEqual("#.#LLLL.##", result[^1]);
+            d11.Step();
+            Assert.AreEqual("#.LL.L#.##", d11.Rows[0]);
+            Assert.AreEqual("#.#LLLL.##", d11.Rows[^1]);
         }
 
         [Test]
@@ -128,7 +128,15 @@ namespace AdventOfCode.Tests
 
             var d11 = new Day11();
             var result = d11.CountOccupiedSeats(rows);
-            Assert.AreEqual(37);
+            Assert.AreEqual(37, result);
+        }
+
+        [Test]
+        public void Test_SolvePt1()
+        {
+            var d11 = new Day11();
+            var result = d11.SolvePt1();
+            Assert.AreEqual(37, result);
         }
     }
 }
