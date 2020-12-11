@@ -30,7 +30,15 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            return SolvePt2().ToString();
+        }
+
+        public int SolvePt2()
+        {
+            // return 37;
+            Rows = Input.SplitByNewline();
+            while (Step2()) {};
+            return CountOccupiedSeats();
         }
 
         public bool Step(string[] rows = null)
@@ -47,6 +55,40 @@ namespace AdventOfCode.Solutions.Year2020
                 {
                     if (IsEmpty(r, c, Rows) && ShouldOccupy(r, c, Rows)) seatsToOccupy.Add((r, c));
                     if (IsOccupied(r, c, Rows) && ShouldVacate(r, c, Rows)) seatsToVacate.Add((r, c));
+                }
+            }
+
+            foreach (var seat in seatsToOccupy)
+            {
+                var row = new StringBuilder(Rows[seat.Row]);
+                row[seat.Col] = '#';
+                Rows[seat.Row] = row.ToString();
+            }
+
+            foreach (var seat in seatsToVacate)
+            {
+                var row = new StringBuilder(Rows[seat.Row]);
+                row[seat.Col] = 'L';
+                Rows[seat.Row] = row.ToString();
+            }
+
+            return (seatsToOccupy.Count + seatsToVacate.Count) > 0;
+        }
+
+        public bool Step2(string[] rows = null)
+        {
+            if (rows != null) Rows = rows;
+
+            var seatsToOccupy = new List<(int Row, int Col)>();
+            var seatsToVacate = new List<(int Row, int Col)>();
+
+            for (int r = 0; r < Rows.Length; r++)
+            {
+                var row = Rows[r];
+                for (int c = 0; c < row.Length; c++)
+                {
+                    if (IsEmpty(r, c, Rows) && ShouldOccupy2(r, c, Rows)) seatsToOccupy.Add((r, c));
+                    if (IsOccupied(r, c, Rows) && ShouldVacate2(r, c, Rows)) seatsToVacate.Add((r, c));
                 }
             }
 
