@@ -175,6 +175,48 @@ namespace AdventOfCode.Tests
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void Test_ShouldVacate2_true()
+        {
+            var rows = new [] {
+                "#.L#.##.L#",
+                "#L#####.LL",
+                "L.#.#..#..",
+                "##L#.##.##",
+                "#.##.#L.##",
+                "#.#####.#L",
+                "..#.#.....",
+                "LLL####LL#",
+                "#.L#####.L",
+                "#.L####.L#",
+            };
+
+            var d11 = new Day11();
+            var result = d11.ShouldVacate2(2, 2, rows);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_ShouldVacate2_false()
+        {
+            var rows = new [] {
+                "#.L#.##.L#",
+                "#L#####.LL",
+                "L.#.#..#..",
+                "##L#.##.##",
+                "#.##.#L.##",
+                "#.#####.#L",
+                "..#.#.....",
+                "LLL####LL#",
+                "#.L#####.L",
+                "#.L####.L#",
+            };
+
+            var d11 = new Day11();
+            var result = d11.ShouldVacate2(2, 7, rows);
+            Assert.IsFalse(result);
+        }
+
         // [Test]
         // public void Test_Part2_Step1()
         // {

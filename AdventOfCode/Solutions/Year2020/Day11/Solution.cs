@@ -83,17 +83,37 @@ namespace AdventOfCode.Solutions.Year2020
             return true;
         }
 
+        public bool ShouldVacate(int row, int column, string[] rows)
+        {
+            var occupiedCount = 0;
+            for (int r = (row - 1); r <= (row + 1); r++)
+            {
+                if (r < 0 || r >= rows.Length) continue;
+                var strRow = rows[r];
+                for (int c = (column - 1); c <= (column + 1); c++)
+                {
+                    if (row == r && column == c) continue;
+                    if (c < 0 || c >= strRow.Length) continue;
+                    if (strRow[c] == '#') 
+                    {
+                        if (++occupiedCount >= 4) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public bool ShouldOccupy2(int row, int column, string[] rows)
         {
             var offsets = new List<(int rOffset, int cOffset)>();
-            offsets.Add((0, 1));
-            offsets.Add((0, -1));
-            offsets.Add((1, 0));
             offsets.Add((-1, 0));
-            offsets.Add((-1, -1));
             offsets.Add((-1, 1));
+            offsets.Add((0, 1));
             offsets.Add((1, 1));
+            offsets.Add((1, 0));
             offsets.Add((1, -1));
+            offsets.Add((0, -1));
+            offsets.Add((-1, -1));
 
             foreach (var offset in offsets)
             {
@@ -118,23 +138,43 @@ namespace AdventOfCode.Solutions.Year2020
             return true;
         }
 
-        public bool ShouldVacate(int row, int column, string[] rows)
+        public bool ShouldVacate2(int row, int column, string[] rows)
         {
             var occupiedCount = 0;
-            for (int r = (row - 1); r <= (row + 1); r++)
+            var offsets = new List<(int rOffset, int cOffset)>();
+            offsets.Add((-1, 0));
+            offsets.Add((-1, 1));
+            offsets.Add((0, 1));
+            offsets.Add((1, 1));
+            offsets.Add((1, 0));
+            offsets.Add((1, -1));
+            offsets.Add((0, -1));
+            offsets.Add((-1, -1));
+
+            foreach (var offset in offsets)
             {
-                if (r < 0 || r >= rows.Length) continue;
-                var strRow = rows[r];
-                for (int c = (column - 1); c <= (column + 1); c++)
+                var keepGoing = true;
+                var r = row;
+                var c = column;
+                while (keepGoing)
                 {
-                    if (row == r && column == c) continue;
-                    if (c < 0 || c >= strRow.Length) continue;
-                    if (strRow[c] == '#') 
+                    r = r + offset.rOffset;
+                    if (r < 0 || r >= rows.Length) break;
+                    var strRow = rows[r];
+                    c = c + offset.cOffset;
+                    if (c < 0 || c >= strRow.Length) break;
+
+                    var seat = strRow[c];
+                    if (seat == '.') continue;
+                    if (seat == 'L') break;
+                    if (seat == '#')
                     {
-                        if (++occupiedCount >= 4) return true;
+                        if (++occupiedCount >= 5) return true;
+                        break;
                     }
                 }
             }
+
             return false;
         }
 
