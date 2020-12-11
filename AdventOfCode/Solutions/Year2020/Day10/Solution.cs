@@ -38,12 +38,32 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            return SolvePt2().ToString();
         }
 
-        public int SolvePt2()
+        public long SolvePt2()
         {
-            return 0;
+            var adapters = Input.ToIntArray("\n")
+                                .ToList();
+            var max = adapters.Max();
+            adapters.Add(0);
+            adapters.Add(max + 3);
+            adapters = adapters.OrderBy(i => i).ToList();
+
+            var cache = new Dictionary<int, long> { [adapters.Count - 1] = 1 };
+
+            for (int i = adapters.Count - 2; i >= 0; i--)
+            {
+                long connections = 0;
+                for (var j = i + 1; j < adapters.Count && adapters[j] - adapters[i] <= 3; j++)
+                {
+                    connections += cache[j];
+                }
+
+                cache[i] = connections;
+            }
+
+            return cache[0];
         }
     }
 }
