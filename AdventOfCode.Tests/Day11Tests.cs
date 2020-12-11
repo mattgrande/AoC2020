@@ -27,12 +27,22 @@ namespace AdventOfCode.Tests
         }
 
         [Test]
-        public void Test_Part1()
+        public void Test_Step1()
         {
             var d11 = new Day11();
             var result = d11.Step(defaultInput);
             Assert.AreEqual("#.##.##.##", result[0]);
             Assert.AreEqual("#.#####.##", result[^1]);
+        }
+
+        [Test]
+        public void Test_Step2()
+        {
+            var d11 = new Day11();
+            var result = d11.Step(defaultInput);
+            result = d11.Step(result);
+            Assert.AreEqual("#.LL.L#.##", result[0]);
+            Assert.AreEqual("#.#LLLL.##", result[^1]);
         }
 
         [Test]
@@ -56,6 +66,69 @@ namespace AdventOfCode.Tests
             defaultInput[1 + r] = new String(charArray);
             var result = d11.ShouldOccupy(1, 4, defaultInput);
             Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Test_ShouldVacate_true()
+        {
+            var rows = new [] {
+                "#.##.##.##",
+                "#######.##",
+                "#.#.#..#..",
+                "####.##.##",
+                "#.##.##.##",
+                "#.#####.##",
+                "..#.#.....",
+                "##########",
+                "#.######.#",
+                "#.#####.##",
+            };
+
+            var d11 = new Day11();
+            var result = d11.ShouldVacate(1, 2, rows);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_ShouldVacate_false()
+        {
+            var rows = new [] {
+                "#.##.##.##",
+                "#######.##",
+                "#.#.#..#..",
+                "####.##.##",
+                "#.##.##.##",
+                "#.#####.##",
+                "..#.#.....",
+                "##########",
+                "#.######.#",
+                "#.#####.##",
+            };
+
+            var d11 = new Day11();
+            var result = d11.ShouldVacate(5, 6, rows);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Test_CountOccupiedSeats()
+        {
+            var rows = new [] {
+                "#.#L.L#.##",
+                "#LLL#LL.L#",
+                "L.#.L..#..",
+                "#L##.##.L#",
+                "#.#L.LL.LL",
+                "#.#L#L#.##",
+                "..L.L.....",
+                "#L#L##L#L#",
+                "#.LLLLLL.L",
+                "#.#L#L#.##",
+            };
+
+            var d11 = new Day11();
+            var result = d11.CountOccupiedSeats(rows);
+            Assert.AreEqual(37);
         }
     }
 }
