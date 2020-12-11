@@ -138,5 +138,60 @@ namespace AdventOfCode.Tests
             var result = d11.SolvePt1();
             Assert.AreEqual(37, result);
         }
+
+        [Test]
+        public void Test_ShouldOccupy2_true()
+        {
+            var d11 = new Day11();
+            var rows = new [] {
+                ".##.##.",
+                "#.#.#.#",
+                "##...##",
+                "...L...",
+                "##...##",
+                "#.#.#.#",
+                ".##.##.",
+            };
+            var result = d11.ShouldOccupy2(3, 3, rows);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_ShouldOccupy2_false()
+        {
+            var d11 = new Day11();
+            var rows = new [] {
+                ".......#.",
+                "...#.....",
+                ".#.......",
+                ".........",
+                "..#L....#",
+                "....#....",
+                ".........",
+                "#........",
+                "...#.....",
+            };
+            var result = d11.ShouldOccupy2(4, 3, rows);
+            Assert.IsFalse(result);
+        }
+
+        // [Test]
+        // public void Test_Part2_Step1()
+        // {
+        //     var d11 = new Day11();
+        //     d11.Step2(defaultInput);
+        //     Assert.AreEqual("#.##.##.##", d11.Rows[0]);
+        //     Assert.AreEqual("#.#####.##", d11.Rows[^1]);
+        // }
+
+        // [Test]
+        // public void Test_Part2_Step2()
+        // {
+        //     var d11 = new Day11();
+        //     var result = d11.Step(defaultInput);
+        //     d11.Step2();
+        //     Assert.AreEqual("#.LL.LL.L#", d11.Rows[0]);
+        //     Assert.AreEqual("#.LLLLL.L#", d11.Rows[^1]);
+        // }
     }
 }
