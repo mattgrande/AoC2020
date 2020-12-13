@@ -11,12 +11,16 @@ namespace AdventOfCode.Solutions.Year2020
         public char Facing { get; private set; }
         public int NS { get; private set; }
         public int EW { get; private set; }
+        public int WaypointNS { get; private set; }
+        public int WaypointEW { get; private set; }
         public Day12() : this('E', 0, 0) {}
         public Day12(char facing = 'E', int ns = 0, int ew = 0) : base(12, 2020, "")
         {
             Facing = facing;
             NS = ns;
             EW = ew;
+            WaypointNS = 1;
+            WaypointEW = 10;
         }
 
         protected override string SolvePartOne()
@@ -83,7 +87,52 @@ namespace AdventOfCode.Solutions.Year2020
                     }
                     break;
             }
-            return;
+        }
+
+        public void MoveWaypoint(string inst)
+        {
+            var command = inst[0];
+            var n = int.Parse(inst.Substring(1));
+            switch (command)
+            {
+                case 'F':
+                    Console.WriteLine("n: {0}, E: {1}, N: {2}", n, n * WaypointEW, n * WaypointNS);
+
+                    EW += (n * WaypointEW);
+                    NS += (n * WaypointNS);
+                    Console.WriteLine("N:{0}, E{1}", NS, EW);
+                    break;
+                // case 'N':
+                //     NS += n;
+                //     break;
+                // case 'S':
+                //     NS -= n;
+                //     break;
+                // case 'E':
+                //     EW += n;
+                //     break;
+                // case 'W':
+                //     EW -= n;
+                //     break;
+                // case 'R':
+                //     {
+                //     var rotations = n / 90;
+                //     var directions = new [] { 'E', 'S', 'W', 'N' }.ToList();
+                //     var currentIndex = directions.FindIndex(f => f == Facing);
+                //     Facing = directions[(currentIndex + rotations) % 4];
+                //     }
+                //     break;
+                // case 'L':
+                //     {
+                //     var rotations = n / 90;
+                //     var directions = new [] { 'E', 'S', 'W', 'N' }.ToList();
+                //     var currentIndex = directions.FindIndex(f => f == Facing);
+                //     var newIndex = currentIndex - rotations;
+                //     // Console.WriteLine("NI:{0}", newIndex);
+                //     Facing = newIndex >= 0 ? directions[newIndex % 4] : directions[^Math.Abs(newIndex)];
+                //     }
+                //     break;
+            }
         }
     }
 }

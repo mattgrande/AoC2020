@@ -55,5 +55,14 @@ F11";
             var mDist = d12.CalculateManhattanDistance();
             Assert.AreEqual(25, mDist);
         }
+
+        [Test]
+        public void Test_MoveWaypointF()
+        {
+            var d12 = new Day12();
+            d12.MoveWaypoint("F10");
+            Assert.AreEqual(10, d12.NS);
+            Assert.AreEqual(100, d12.EW);
+        }
     }
 }
