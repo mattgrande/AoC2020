@@ -15,9 +15,6 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-//             DebugInput = @"939
-// 7,13,x,x,59,x,31,19";
-
             var lines = Input.Split('\n');
             var arrival = int.Parse(lines[0]);
             var buses = lines[1].Split(',')
@@ -35,7 +32,6 @@ namespace AdventOfCode.Solutions.Year2020
                     min = m;
                     result = m * b;
                 }
-                Console.WriteLine("Bus {0} will depart in {1} minutes", b, m);
             }
 
             return result.ToString();
@@ -43,7 +39,28 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            var lines = Input.Split('\n');
+            var buses = lines[1].Split(',')
+                                .Select((b, ix) => (s: b, ix))
+                                .Where(b => b.s != "x")
+                                .Select(b => (s: long.Parse(b.s), ix: b.ix))
+                                .ToList()
+                                ;
+
+            var increment = buses[0].s;
+            var busIndex = 1;
+            long i;
+            for (i = increment; busIndex < buses.Count; i += increment)
+            {
+                var bus = buses[busIndex];
+                if ((i + bus.ix) % bus.s == 0)
+                {
+                    increment *= bus.s;
+                    busIndex++;
+                }
+            }
+
+            return (i - increment).ToString();
         }
     }
 }
